@@ -10,11 +10,14 @@ type Props = {
   user: any;
   activeTab: string;
   setActiveTab: (tab: string) => void;
+  onProfileClick: () => void;
+  avatarUrl?: string | null;
+  displayName?: string | null;
   onSignOut: () => void;
   children: React.ReactNode;
 };
 
-export function AppShell({ user, activeTab, setActiveTab, onSignOut, children }: Props) {
+export function AppShell({ user, activeTab, setActiveTab, onSignOut, onProfileClick, avatarUrl= null, displayName = null, children }: Props) {
   const tabs = [
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
     { id: "logs", label: "Log Sheet", icon: FileText },
@@ -50,9 +53,18 @@ export function AppShell({ user, activeTab, setActiveTab, onSignOut, children }:
               <LogOut size={20} />
             </IconButton>
 
-            <div className="w-8 h-8 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center text-[rgb(var(--brand))] text-[10px] font-bold uppercase shadow-inner">
-              {user?.email?.[0] || "U"}
-            </div>
+            <button
+              type="button"
+              onClick={onProfileClick}
+              className="w-8 h-8 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center text-[rgb(var(--brand))] text-[10px] font-bold uppercase shadow-inner overflow-hidden"
+              title="Profile"
+            >
+              {avatarUrl ? (
+                <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+              ) : (
+                <span>{(displayName?.[0] || user?.email?.[0] || "U").toUpperCase()}</span>
+              )}
+            </button>
           </div>
         </div>
       </nav>

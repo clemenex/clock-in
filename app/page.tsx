@@ -20,6 +20,9 @@ import { LogsTab } from "../components/tabs/LogsTab";
 import { AnalyticsTab } from "../components/tabs/AnalyticsTab";
 import { ProjectsTab } from "../components/tabs/ProjectsTab";
 
+import { useProfile } from "../hooks/useProfile";
+import { ProfileTab } from "../components/tabs/ProfileTab";
+
 export default function App() {
   const supabase = useMemo(() => createBrowserSupabaseClient() as SupabaseClient | null, []);
   const { user, authError, authLoading, setAuthError, authWithEmail, signOut, enterDemoMode } = useAuth(supabase);
@@ -50,6 +53,9 @@ export default function App() {
 
   // Projects
   const [newProject, setNewProject] = useState({ name: "", link: "", color: "#004AAD" });
+
+  // Profile
+  const { profile, loadingProfile, profileError, saveProfile, uploadAvatar } = useProfile(supabase, user);
 
   // Load docx
   useEffect(() => {
@@ -283,7 +289,15 @@ export default function App() {
   }
 
   return (
-    <AppShell user={user} activeTab={activeTab} setActiveTab={setActiveTab} onSignOut={handleSignOut}>
+    <AppShell
+      user={user}
+      activeTab={activeTab}
+      setActiveTab={setActiveTab}
+      onSignOut={handleSignOut}
+      onProfileClick={() => setActiveTab("profile")}
+      avatarUrl={profile?.avatar_url}
+      displayName={profile?.full_name}
+    >
       {activeTab === "dashboard" && <DashboardTab metrics={metrics} weeklyGoal={weeklyGoal} onNewEntry={onNewEntry} />}
 
       {activeTab === "logs" && (
@@ -323,6 +337,17 @@ export default function App() {
           setNewProject={setNewProject}
           addProject={addProject}
           deleteProject={deleteProject}
+        />
+      )}
+
+      {activeTab === "profile" && (
+        <ProfileTab
+          profile={profile}
+          loading={loadingProfile}
+          error={profileError}
+          onBack={() => setActiveTab("dashboard")}
+          onSave={(draft) => saveProfile(draft)}
+          onUploadAvatar={(file) => uploadAvatar(file)}
         />
       )}
     </AppShell>
