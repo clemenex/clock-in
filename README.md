@@ -1,4 +1,4 @@
-cLock In: Productivity Intelligence Suite
+# cLock In: Productivity Intelligence Suite
 
 cLock In is a next-generation time-tracking and career-building application designed specifically for developers, interns, and knowledge workers. It transcends standard timesheets by analyzing cognitive load, gamifying skill progression, and automatically synthesizing your daily logs into professional, STAR-method resume bullets.
 
